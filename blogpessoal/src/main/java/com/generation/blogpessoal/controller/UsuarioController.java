@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.generation.blogpessoal.model.Usuario;
+import com.generation.blogpessoal.model.UsuarioLogin;
 import com.generation.blogpessoal.repository.UsuarioRepository;
+import com.generation.blogpessoal.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +32,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@GetMapping
 	public ResponseEntity<List<Usuario>> getAll() {
@@ -52,10 +57,20 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioRepository.findAllByUsuarioContainingIgnoreCase(usuario));
 	}
 	
-	@PostMapping
-	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
-	}
+    @PostMapping("/logar")
+    public ResponseEntity<UsuarioLogin> login(@RequestBody Optional<UsuarioLogin> usuarioLogin) {
+        return usuarioService.autenticarUsuario(usuarioLogin)
+            .map(resposta -> ResponseEntity.ok(resposta))
+            .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+	
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Usuario> postUsuario(@Valid @RequestBody Usuario usuario) {
+        return usuarioService.cadastrarUsuario(usuario)
+            .map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+            .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
+    }
 	
 	@PutMapping
 	public ResponseEntity<Usuario> put(@Valid @RequestBody Usuario usuario) {
