@@ -36,12 +36,17 @@ public class Postagem {
 	private LocalDateTime data;
 	
 	@ManyToOne
+<<<<<<< HEAD
 	@JsonIgnoreProperties("postagens")
 	private Usuario usuario;
 	
 	@ManyToOne
 	@JsonIgnoreProperties("postagens")
 	private Tema tema;
+=======
+	@JsonIgnoreProperties("usuario")
+	private Usuario usuario;
+>>>>>>> bbdfeab106f1c5fcf5242f33a8983d16130632e6
 
 	public Long getId() {
 		return id;
