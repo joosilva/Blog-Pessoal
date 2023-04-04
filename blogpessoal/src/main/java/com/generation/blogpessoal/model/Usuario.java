@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class Usuario {
 	@Size(min = 3, max = 16, message = "O nickname deve conter entre 3 e 16 caracteres.")
 	private String nickname;
 	
+	@Schema(example = "email@email.com.br")
 	@NotBlank(message = "Campo obrigatório.")
 	@Email
 	private String usuario;
